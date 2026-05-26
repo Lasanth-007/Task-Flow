@@ -1,23 +1,34 @@
-# TaskFlow – Full Stack (Springboot/Reaact) Task Manager
+# TaskFlow – Task Manager (Springboot/React)
 ## Backend Focused on Global centralized exception handling
  
 A modern full-stack task management application built using **React + Vite** for the frontend and **Spring Boot** for the backend.
 
-TaskFlow allows users to create, update, search, filter, complete, and delete tasks through a responsive dashboard interface while showcasing enterprise-level backend architecture, centralized exception handling, immutable DTO usage, and compile-time object mapping.
+TaskFlow allows users to create, update, search, filter, complete, and delete tasks through a responsive dashboard interface while showcasing enterprise-level backend architecture, **Centralized exception handling**, immutable DTO usage, and compile-time object mapping.
 
----
 
-# 📸 Application Preview
+### Front preview
 
-## Dashboard UI
-- Modern dark-themed workspace dashboard
-- Sidebar navigation and task filters
-- Real-time progress tracking
-- Search functionality
-- Responsive task cards
-- Confirmation modal animations
+#### 1. Dashboard Overview
+![Dashboard](assets/screenshots/dashboard.png)
 
----
+#### 2. Create Task Form
+![Create Task](assets/screenshots/create-task.png)
+
+#### 3. Task Filtering
+![Filtering](assets/screenshots/filtering.png)
+
+#### 4. Progress Tracking
+![Progress](assets/screenshots/progress.png)
+
+#### 4. Search Functionality
+![Search](assets/screenshots/search.png)
+
+#### 5.  Delete Confirmation Modal
+![Modal](assets/screenshots/modal.png)
+
+#### 6. Dark Mode Interface
+![Dark Mode](assets/screenshots/darkmode.png)
+
 
 # 🚀 Tech Stack
 
@@ -197,25 +208,3 @@ Every single failed request returns an identical JSON structure, making it highl
 #### 4. Patch description field only
 ![patch.png](assets/screenshots/patch.png)
 
-### Front End Screenshots
-
-#### 1. Dashboard Overview
-![Dashboard](assets/screenshots/dashboard.png)
-
-#### 2. Create Task Form
-![Create Task](assets/screenshots/create-task.png)
-
-#### 3. Task Filtering
-![Filtering](assets/screenshots/filtering.png)
-
-#### 4. Progress Tracking
-![Progress](assets/screenshots/progress.png)
-
-#### 4. Search Functionality
-![Search](assets/screenshots/search.png)
-
-#### 5.  Delete Confirmation Modal
-![Modal](assets/screenshots/modal.png)
-
-#### 6. Dark Mode Interface
-![Dark Mode](assets/screenshots/darkmode.png)
