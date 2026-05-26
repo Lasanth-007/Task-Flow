@@ -1,122 +1,193 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect } from 'react';
+import Sidebar from './components/Sidebar';
+import TaskForm from './components/TaskForm';
+import TaskCard from './components/TaskCard';
+import ConfirmModal from './components/ConfirmModal';
+import './index.css';
+
+const API_BASE = 'http://localhost:8080/api/tasks';
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [tasks, setTasks] = useState([]);
+    const [filter, setFilter] = useState('all');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [editingTask, setEditingTask] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [taskToDelete, setTaskToDelete] = useState(null);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    // Load theme preference from localStorage
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setIsDarkMode(true);
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        fetchTasks();
+    }, []);
 
-      <div className="ticks"></div>
+    const toggleDarkMode = () => {
+        const newMode = !isDarkMode;
+        setIsDarkMode(newMode);
+        
+        if (newMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        }
+    };
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+    const fetchTasks = async () => {
+        try {
+            const res = await fetch(API_BASE);
+            if (!res.ok) throw new Error('Failed to fetch');
+            const data = await res.json();
+            setTasks(data);
+        } catch (err) {
+            console.error(err);
+            alert('Cannot connect to backend. Is Spring Boot running?');
+        }
+    };
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    // Filter tasks
+    const filteredTasks = tasks
+        .filter(task => {
+            if (filter === 'pending') return !task.completed;
+            if (filter === 'completed') return task.completed;
+            return true;
+        })
+        .filter(task =>
+            task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            task.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+    // Handlers
+    const handleSubmit = async (taskData) => {
+        try {
+            if (editingTask) {
+                await fetch(`${API_BASE}/${editingTask.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(taskData)
+                });
+            } else {
+                await fetch(API_BASE, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(taskData)
+                });
+            }
+            fetchTasks();
+            setEditingTask(null);
+        } catch (err) {
+            alert('Operation failed');
+        }
+    };
+
+    const toggleComplete = async (id, currentStatus) => {
+        try {
+            await fetch(`${API_BASE}/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed: !currentStatus })
+            });
+            fetchTasks();
+        } catch (err) {
+            alert('Failed to update');
+        }
+    };
+
+    const handleEdit = (task) => {
+        setEditingTask(task);
+    };
+
+    const handleDeleteClick = (id) => {
+        setTaskToDelete(id);
+        setShowModal(true);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            await fetch(`${API_BASE}/${taskToDelete}`, { method: 'DELETE' });
+            fetchTasks();
+        } catch (err) {
+            alert('Delete failed');
+        } finally {
+            setShowModal(false);
+            setTaskToDelete(null);
+        }
+    };
+
+    return (
+        <div className="app-container">
+            <Sidebar 
+                filter={filter} 
+                setFilter={setFilter} 
+                tasks={tasks}
+                isDarkMode={isDarkMode}
+                toggleDarkMode={toggleDarkMode}
+            />
+
+            <main className="main-content">
+                <header className="top-bar">
+                    <h1>Workspace Dashboard</h1>
+                    <div className="search-box">
+                        <i className="fa-solid fa-magnifying-glass"></i>
+                        <input
+                            type="text"
+                            placeholder="Search tasks..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                </header>
+
+                <div className="dashboard-grid">
+                    <TaskForm 
+                        onSubmit={handleSubmit} 
+                        editingTask={editingTask}
+                        setEditingTask={setEditingTask}
+                    />
+
+                    <div className="list-section">
+                        <div className="list-header">
+                            <h2>
+                                {filter === 'all' ? 'All Tasks' :
+                                 filter === 'pending' ? 'Pending Tasks' : 'Completed Tasks'}
+                            </h2>
+                            <span className="badge">{filteredTasks.length} Tasks</span>
+                        </div>
+
+                        <div className="task-cards-container">
+                            {filteredTasks.map(task => (
+                                <TaskCard
+                                    key={task.id}
+                                    task={task}
+                                    onToggle={toggleComplete}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDeleteClick}
+                                />
+                            ))}
+
+                            {filteredTasks.length === 0 && (
+                                <p style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>
+                                    No tasks found.
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <ConfirmModal
+                isOpen={showModal}
+                onCancel={() => setShowModal(false)}
+                onConfirm={confirmDelete}
+            />
+        </div>
+    );
 }
 
-export default App
+export default App;
