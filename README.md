@@ -131,32 +131,32 @@ taskflow/
 
 ---
 
-# 🎨 Frontend UI Components
+## 🎨 Frontend UI Components
 
-## Sidebar
+### Sidebar
 - Task filtering navigation
 - Progress tracking
 - Dark mode toggle
 
-## Task Form
+### Task Form
 - Create new tasks
 - Edit existing tasks
 - Controlled form handling
 
-## Task Cards
+### Task Cards
 - Dynamic task status badges
 - Toggle completion state
 - Edit/Delete actions
 
-## Confirmation Modal
+### Confirmation Modal
 - Animated delete confirmation dialog
 
 
-### 🛡️ Exception Handling & Error Strategy
+# 🛡️ Exception Handling & Error Strategy
 
 This backend implements a unified, strict error response strategy. Instead of allowing default Spring container error stack traces to leak to the client, all runtime discrepancies are intercepted globally.
 
-### 1.Standard Error Payload
+## 1.Standard Error Payload
 
 Every single failed request returns an identical JSON structure, making it highly predictable for frontend error parsing:
 
@@ -171,7 +171,7 @@ Every single failed request returns an identical JSON structure, making it highl
 ```
 ---
 
-### 2. Architectural Flow
+## 2. Architectural Flow
 
 - **Encapsulation:** Custom business exceptions like `TaskNotFoundException` accept raw data (such as the missing target ID) directly into their constructor. The string formatting logic lives entirely within the exception class, keeping the call-site inside the service layer clean and declarative (`throw new TaskNotFoundException(id);`).
 ![notfound.png](assets/screenshots/notfound.png)
