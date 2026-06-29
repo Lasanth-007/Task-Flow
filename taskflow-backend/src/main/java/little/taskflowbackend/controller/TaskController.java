@@ -34,6 +34,7 @@ public class TaskController {
             (@RequestBody TaskRequestDto dto) {
         TaskResponseDto created = taskService.createTask(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
+
     }
 
     @PutMapping("/{id}")
