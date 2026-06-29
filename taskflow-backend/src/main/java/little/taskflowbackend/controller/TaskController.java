@@ -33,7 +33,7 @@ public class TaskController {
     public ResponseEntity<TaskResponseDto> createTask
             (@RequestBody TaskRequestDto dto) {
         TaskResponseDto created = taskService.createTask(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
