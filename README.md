@@ -1,44 +1,10 @@
-# TaskFlow – Task Manager (Springboot/React)
+# TaskFlow – Task Manager (Springboot)
 ## Backend Focused on Global centralized exception handling
  
-A modern full-stack task management application built using **React + Vite** for the frontend and **Spring Boot** for the backend.
+A back-endtask management built using **Spring Boot**
 
-TaskFlow allows users to create, update, search, filter, complete, and delete tasks through a responsive dashboard interface while showcasing enterprise-level backend architecture, **Centralized exception handling**, immutable DTO usage, and compile-time object mapping.
+TaskFlow allows to do CRUD operations through backend architecture which has **Centralized exception handling**, immutable DTO usage, and compile-time object mapping.
 
-
-### Front preview
-
-#### 1. Dashboard Overview
-![Dashboard](assets/screenshots/dashboard.png)
-
-#### 2. Create Task Form
-![Create Task](assets/screenshots/create-task.png)
-
-#### 3. Task Filtering
-![Filtering](assets/screenshots/filtering.png)
-
-#### 4. Progress Tracking
-![Progress](assets/screenshots/progress.png)
-
-#### 4. Search Functionality
-![Search](assets/screenshots/search.png)
-
-#### 5.  Delete Confirmation Modal
-![Modal](assets/screenshots/modal.png)
-
-#### 6. Dark Mode Interface
-![Dark Mode](assets/screenshots/darkmode.png)
-
-
-# 🚀 Tech Stack
-
-## Frontend
-- React 18
-- Vite
-- JavaScript (ES6+)
-- CSS3
-- Font Awesome
-- Fetch API
 
 ## Backend
 - Java 21
@@ -50,24 +16,7 @@ TaskFlow allows users to create, update, search, filter, complete, and delete ta
 
 ---
 
-# ✨ Features
-
-## Frontend Features
-- Create tasks
-- Edit existing tasks
-- Delete tasks with confirmation modal
-- Mark tasks as completed/pending
-- Live search functionality
-- Filter tasks:
-  - All Tasks
-  - Pending Tasks
-  - Completed Tasks
-- Progress tracking bar
-- Dark mode support
-- Responsive dashboard UI
-- Smooth modal animations
-
-## Backend Features
+## Features
 - RESTful API architecture
 - Layered enterprise architecture
 - Global centralized exception handling
@@ -81,12 +30,9 @@ TaskFlow allows users to create, update, search, filter, complete, and delete ta
 
 # 🧠 Architecture Overview
 
-The application follows a layered architecture:
 
-```text
-Frontend (React)
-        ↓
-REST API Communication (Fetch API)
+```
+REST API Communication
         ↓
 Spring Boot Controllers
         ↓
@@ -104,22 +50,7 @@ Postgres Database
 ```text
 taskflow/
 │
-├── taskflow-frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── ConfirmModal.jsx
-│   │   │   ├── Sidebar.jsx
-│   │   │   ├── TaskCard.jsx
-│   │   │   └── TaskForm.jsx
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   │
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.js
-│
-└── taskflow-backend/
+└── taskflow/
     ├── controller/
     ├── dto/
     ├── entity/
@@ -130,27 +61,6 @@ taskflow/
 ```
 
 ---
-
-## 🎨 Frontend UI Components
-
-### Sidebar
-- Task filtering navigation
-- Progress tracking
-- Dark mode toggle
-
-### Task Form
-- Create new tasks
-- Edit existing tasks
-- Controlled form handling
-
-### Task Cards
-- Dynamic task status badges
-- Toggle completion state
-- Edit/Delete actions
-
-### Confirmation Modal
-- Animated delete confirmation dialog
-
 
 # 🛡️ Exception Handling & Error Strategy
 
